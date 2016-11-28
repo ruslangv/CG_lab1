@@ -1,0 +1,106 @@
+<HTML>
+<BODY>
+<p>lab1 | Golov | Bresenham | IU8-51</p>
+<canvas id='lab1' width='150' height='150'>
+<script>
+var canvas = document.getElementById('lab1');	
+var ctx = canvas.getContext('2d');
+
+function sign(x) 
+{
+	return (x > 0) ? 1 : (x < 0) ? -1 : 0;
+}
+
+function drawLine(x0, y0, x1, y1)
+{
+	var x, y, dx, dy, incx, incy, pdx, pdy, es, el, error;
+	dx = x1 - x0; 
+	dy = y1 - y0; 
+	
+	incx = sign(dx);
+	incy = sign(dy);
+	if (dx < 0) dx = Math.abs(dx);
+	if (dy < 0) dy = Math.abs(dy);
+	if(dx > dy) 
+	{
+		pdx = incx; 
+		pdy = 0;
+		es = dy; 
+		el = dx;	
+	}
+	else 
+	{
+		pdx = 0;	
+		pdy = incy;
+		es = dx;
+		el = dy; 
+	}
+	x = x0;
+	y = y0;
+	error = el / 2;
+	ctx.fillRect(x, y, 1, 1); 
+	
+	for (t = 0; t < el; t++) 
+	{
+		error -= es;
+		if (error < 0)
+		{
+			error += el;
+			x += incx; 
+			y += incy;
+		}
+		else
+		{
+			x += pdx; 
+			y += pdy; 
+		}
+		ctx.fillRect(x, y, 1, 1);
+	}
+}
+
+function drawCircle(x0, y0, r)
+{
+	var x = 0;
+	var y = r;
+	delta = 1 - 2 * r;
+	var error = 0;
+	
+	while(y >= 0) 
+	{
+		ctx.fillRect(x0 + x, y0 + y, 1, 1);
+		ctx.fillRect(x0 + x, y0 - y, 1, 1);
+		ctx.fillRect(x0 - x, y0 + y, 1, 1);
+		ctx.fillRect(x0 - x, y0 - y, 1, 1);
+		
+		error = 2 * (delta + y) - 1;
+		
+		if(delta < 0 && error <= 0) 
+		{
+			x++;
+			delta += 2 * x + 1;
+			continue;
+		}
+		
+		error = 2 * (delta - x) - 1;
+		
+		if(delta > 0 && error > 0) 
+		{
+			y--;
+			delta += 1 - 2 * y;
+			continue;
+		}
+		
+		x++;
+		delta += 2 * (x - y);
+		y--;
+	}
+}
+drawCircle(50, 50, 35);
+drawLine(0, 50, 50, 0);
+drawLine(0, 50, 50, 100);
+drawLine(50, 100, 100, 50);
+drawLine(100, 50, 50, 0);
+</script>
+</canvas>
+</BODY>
+</HTML>
